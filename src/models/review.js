@@ -10,8 +10,8 @@ const schema = new Schema(
     },
     text: {
       type: String,
-      minlength: [2, '2 to 160 characters'],
-      maxlength: [160, '2 to 160 characters']
+      minlength: [2, '2 to 240 characters'],
+      maxlength: [240, '2 to 240 characters']
     },
     author: {
       type: Schema.Types.ObjectId,

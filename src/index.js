@@ -1,11 +1,18 @@
 import app from './app';
 import connectDatabase from './database';
 import { port } from './config';
+import mocks from './mocks';
+
+const filling = false;
 
 (async () => {
   try {
     const info = await connectDatabase();
     console.log(`Connected to ${info.host}:${info.port}/${info.name}`);
+
+    if (info && filling) {
+      await mocks();
+    }
   } catch (error) {
     console.error('Unable to connect to database');
     process.exit(1);
