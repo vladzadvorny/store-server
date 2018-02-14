@@ -10,13 +10,12 @@ import path from 'path';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
 import { isDevelopment, endpointURL } from './config';
+import models from './models';
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schemas')));
-
 const resolvers = mergeResolvers(
   fileLoader(path.join(__dirname, './resolvers'))
 );
-
 export const schema = makeExecutableSchema({
   typeDefs,
   resolvers
@@ -33,7 +32,9 @@ router.all(
   endpointURL,
   graphqlKoa(() => ({
     schema,
-    context: {},
+    context: {
+      models
+    },
     validationRules: [depthLimit(3)],
     debug: false
   }))
