@@ -1,0 +1,14 @@
+enum TypeEnum {
+  bot
+  channel
+  group
+  sticker
+}
+
+type Category {
+  id: ID!
+  name: String
+  type: TypeEnum!
+  langs: [String!]!
+  url: String
+}

@@ -1,0 +1,7 @@
+type User {
+  id: ID!
+  name: String!
+  telegramId: Int!
+  # products: [Product]!
+  # reviews: [Review]!
+}

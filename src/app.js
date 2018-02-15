@@ -11,6 +11,7 @@ import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
 import { isDevelopment, endpointURL } from './config';
 import models from './models';
+import loaders from './loaders';
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schemas')));
 const resolvers = mergeResolvers(
@@ -28,12 +29,27 @@ app.use(koaBody());
 app.use(cors());
 app.use(compress());
 
+// locale
+app.use(async (ctx, next) => {
+  ctx.locale = { interface: 'en', products: ['en'] };
+  try {
+    const locale = JSON.parse(ctx.headers['x-locale']);
+    ctx.locale = Object.assign({}, ctx.locale, locale);
+  } catch (error) {
+    //
+  }
+
+  await next();
+});
+
 router.all(
   endpointURL,
-  graphqlKoa(() => ({
+  graphqlKoa(ctx => ({
     schema,
     context: {
-      models
+      locale: ctx.locale,
+      models,
+      loaders: loaders()
     },
     validationRules: [depthLimit(3)],
     debug: false
